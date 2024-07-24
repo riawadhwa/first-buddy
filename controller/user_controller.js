@@ -32,30 +32,29 @@ res.json({status:true,success:`${email} User Registered Success`})
 }
 
 
-exports.login = async(req,res,next)=>{
-    try{
-const {email,password} = req.body;
-const user = await UserService.checkUser(email);
-console.log("----------------user---------",user)
-if(!user){
-    throw new Error("User Dont Exist");
-}
-const isMatch = await user.comparePassword(password);
-if(isMatch == false){
-    throw new Error("Password is invalid");
-}
+exports.login = async (req, res) => {
+    try {
+        const { email, password } = req.body;
+        const user = await UserService.checkUser(email);
 
-let tokenData = {_id:user._id,email:user.email};
+        if (!user) {
+            return res.status(404).json({ status: false, message: "User does not exist" });
+        }
 
-const token = await UserService.generateToken(tokenData,"secretKey","1h");
+        const isMatch = await user.comparePassword(password);
+        if (!isMatch) {
+            return res.status(400).json({ status: false, message: "Invalid password" });
+        }
 
-res.status(200).json({status:true,token:token});
- 
-    }catch(err){
-        throw err;
+        const tokenData = { _id: user._id, email: user.email };
+        const token = await UserService.generateToken(tokenData, "secretKey", "1h");
+
+        res.status(200).json({ status: true, token: token });
+    } catch (err) {
+        res.status(500).json({ status: false, message: err.message });
     }
+};
 
-}
 
 
 exports.feedback = async(req,res) => {
