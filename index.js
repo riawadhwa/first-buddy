@@ -1,10 +1,7 @@
-const app = require("./app");
-const db = require("./config/db");
-const userModel = require("./models/user_model");
-const empModel = require("./models/file_model");
+const app = require('./app'); // Import the app
 
-const port = process.env.PORT || 3000;
-
+// Start the server
+const port = process.env.PORT || 3000; // Default to port 3000 if not provided by environment
 app.listen(port, () => {
-    console.log(`Server listen on http://localhost:${port}`);
+  console.log(`Server running on port ${port}`);
 });
