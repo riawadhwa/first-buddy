@@ -1,10 +1,13 @@
-const db = require('../config/db');
-const mongoose =require('mongoose');
-const UserModel = require("./user_model");
-const {Schema} = mongoose;
-
+const db = require("../config/db");
+const mongoose = require("mongoose");
+const { Schema } = mongoose;
 
 const fileSchema = new Schema({
+    user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User", // Assuming your user model is named 'User'
+        required: true,
+    },
     title: {
         type: String,
         required: true,
@@ -13,18 +16,22 @@ const fileSchema = new Schema({
         type: String,
         required: true,
     },
-    pdfData10th: {
-        type: Buffer, // Assuming you want to store 10th result PDF data as Buffer
+    generalDocuments: {
+        aadharCard: Buffer,
+        panCard: Buffer,
+        passport: Buffer,
+        passportPhoto: Buffer,
+        voterIdOrDrivingLicense: Buffer,
     },
-    pdfData12th: {
-        type: Buffer, // Assuming you want to store 12th result PDF data as Buffer
-    },
-    resumeData: {
-        type: Buffer, // Assuming you want to store resume PDF data as Buffer
+    educationalDocuments: {
+        tenthMarksheet: Buffer,
+        twelfthMarksheet: Buffer,
+        ugDegreeMarksheet: Buffer,
+        pgDegreeMarksheet: Buffer,
+        certificates: Buffer,
     },
 });
 
-const File = db.model('File', fileSchema);
+const File = db.model("File", fileSchema);
 
 module.exports = File;
-

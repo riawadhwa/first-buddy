@@ -1,39 +1,26 @@
-const route =require('express').Router();
-const UserController = require('../controller/user_controller');
-const multer = require('multer');
-const File = require('../models/file_model');
-const UserService = require('../services/user_services')
+const route = require("express").Router();
+const UserController = require("../controller/user_controller");
+const FileController = require("../controller/file_controller");
+const UserService = require("../services/user_services");
+const authenticate = require('../middleware/authenticate');
 
-route.post("/registration",UserController.register);
-route.post("/login",UserController.login);
+route.post("/registration", UserController.register);
+route.post("/login", UserController.login);
 
-// Multer configuration
-const storage = multer.memoryStorage();
-const upload = multer({ storage: storage });
-
-route.post("/upload", upload.fields([
-    { name: '10thResult', maxCount: 1 },
-    { name: '12thResult', maxCount: 1 },
-    { name: 'resume', maxCount: 1 },
-]), async (req, res) => {
-    try {
-        const newFile = new File({
-            title: req.body.title,
-            description: req.body.description,
-            pdfData10th: req.files['10thResult'][0].buffer,
-            pdfData12th: req.files['12thResult'][0].buffer,
-            resumeData: req.files['resume'][0].buffer,
-        });
-
-        const savedFile = await newFile.save();
-        res.json(savedFile);
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
+route.get("/user", authenticate, (req, res) => {
+  // req.user is available here thanks to our middleware
+  res.json({ id: req.user });
 });
 
 
-route.post('/update-details', async (req, res) => {
+
+route.post(
+    "/upload", authenticate,
+    FileController.multerMiddleware,
+    FileController.uploadFiles,
+);
+
+route.post("/update-details", async (req, res) => {
     try {
         // Extract user ID from request body or headers
         const email = req.body.email; // You may need to send the userId in the request body
@@ -43,12 +30,15 @@ route.post('/update-details', async (req, res) => {
             address: req.body.address,
             dob: req.body.dob,
             position: req.body.position,
-            
+
             // Add more fields as needed
         };
 
         // Update the user with additional details
-        const updatedUser = await UserService.updateUser(email, additionalDetails);
+        const updatedUser = await UserService.updateUser(
+            email,
+            additionalDetails,
+        );
 
         // Send the updated user as a response
         res.json(updatedUser);
@@ -58,6 +48,6 @@ route.post('/update-details', async (req, res) => {
     }
 });
 
-route.post("/feedback-form",UserController.feedback);
+route.post("/feedback-form", UserController.feedback);
 
 module.exports = route;
