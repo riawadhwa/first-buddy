@@ -20,33 +20,7 @@ route.post(
     FileController.uploadFiles,
 );
 
-route.post("/update-details", async (req, res) => {
-    try {
-        // Extract user ID from request body or headers
-        const email = req.body.email; // You may need to send the userId in the request body
-
-        // Extract additional details from the request body
-        const additionalDetails = {
-            address: req.body.address,
-            dob: req.body.dob,
-            position: req.body.position,
-
-            // Add more fields as needed
-        };
-
-        // Update the user with additional details
-        const updatedUser = await UserService.updateUser(
-            email,
-            additionalDetails,
-        );
-
-        // Send the updated user as a response
-        res.json(updatedUser);
-    } catch (error) {
-        // Handle errors, e.g., if the user is not found or there's a server error
-        res.status(500).json({ error: error.message });
-    }
-});
+route.post('/update-details', UserController.updateDetails);
 
 route.post("/feedback-form", UserController.feedback);
 
