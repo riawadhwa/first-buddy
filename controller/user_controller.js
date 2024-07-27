@@ -56,6 +56,48 @@ exports.login = async (req, res) => {
 };
 
 
+exports.updateDetails = async (req, res) => {
+    try { 
+        user: req.user;
+        // Extract email from request body
+        const email = req.body.email;
+
+        const additionalDetails = {
+            // Add the present address details
+            presentAddress: {
+                line1: req.body.presentAddressLine1,
+                street: req.body.presentAddressStreet,
+                city: req.body.presentAddressCity,
+                stateProvince: req.body.presentAddressStateProvince,
+                country: req.body.presentAddressCountry,
+                zipCode: req.body.presentAddressZipCode
+            },
+            permanentAddress: {
+                line1: req.body.permanentAddressLine1,
+                street: req.body.permanentAddressStreet,
+                city: req.body.permanentAddressCity,
+                stateProvince: req.body.permanentAddressStateProvince,
+                country: req.body.permanentAddressCountry,
+                zipCode: req.body.permanentAddressZipCode
+            }
+
+            // Add more fields as needed
+        };
+
+        // Update the user with additional details
+        const updatedUser = await UserService.updateUser(email, additionalDetails);
+
+        // Send the updated user as a response
+        res.json(updatedUser);
+    } catch (error) {
+        // Handle errors, e.g., if the user is not found or there's a server error
+        res.status(500).json({ error: error.message });
+    }
+};
+
+
+
+
 
 exports.feedback = async(req,res) => {
     try{
