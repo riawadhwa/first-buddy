@@ -1,11 +1,11 @@
 modules = ["nodejs-20"]
-run = "npm run dev"
+run = "npm run dev index.js"
 
 [nix]
 channel = "stable-24_05"
 
 [deployment]
-run = ["sh", "-c", "npm install --legacy-peer-deps && npm run dev"]
+run = ["sh", "-c", "npm run dev index.js"]
 
 [[ports]]
 localPort = 3000

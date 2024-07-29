@@ -79,6 +79,23 @@ exports.updateDetails = async (req, res) => {
                 stateProvince: req.body.permanentAddressStateProvince,
                 country: req.body.permanentAddressCountry,
                 zipCode: req.body.permanentAddressZipCode
+            },
+            familyDetails: {
+                name: req.body.familyName,
+                relationship: req.body.familyRelationship,
+                dob: req.body.familyDOB,
+                gender: req.body.familyGender,
+                phoneNumber: req.body.familyPhoneNumber,
+                email: req.body.familyEmail,
+                address: req.body.familyAddress,
+                maritalStatus: req.body.familyMaritalStatus,
+                employmentStatus: req.body.familyEmploymentStatus,
+                dependantStatus: req.body.familyDependantStatus
+            },
+            bankDetails: {
+                bankName: req.body.bankName,
+                bankAccountNumber: req.body.bankAccountNumber,
+                ifsc: req.body.ifsc
             }
 
             // Add more fields as needed
