@@ -3,7 +3,7 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 
 class UserService {
-    static async registerUser(name, email, num, password) {
+    static async registerUser(name, email, num, password, department) {
         try {
             const existingUser = await userModel.findOne({ email });
             if (existingUser) {
@@ -17,6 +17,7 @@ class UserService {
                 password: hashedPassword,
                 num,
                 name,
+                department
             });
             user = await user.save();
 
@@ -60,7 +61,7 @@ class UserService {
     }
     static async getAllUsers() {
         try {
-            const users = await userModel.find({}, "email name _id");
+            const users = await userModel.find({}, "email name _id department num");
             return users;
         } catch (error) {
             throw new Error("Error fetching users: " + error.message);
