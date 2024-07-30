@@ -12,12 +12,13 @@ function extractValidationErrors(error) {
 
 exports.register = async (req, res, next) => {
     try {
-        const { name, email, num, password } = req.body;
+        const { name, email, num, password, department } = req.body;
         const successRes = await UserService.registerUser(
             name,
             email,
             num,
             password,
+            department,
         );
 
         res.json({ status: true, success: `${email} User Registered Success` });

@@ -1,54 +1,63 @@
-const mongoose =require('mongoose');
-const bcrypt = require('bcrypt');
-const db = require('../config/db');
+const mongoose = require("mongoose");
+const bcrypt = require("bcrypt");
+const db = require("../config/db");
 
-const {Schema} = mongoose;
+const { Schema } = mongoose;
 
-
-const addressSchema = new Schema({
-    line1: { type: String, required: true },
-    street: { type: String, required: true },
-    city: { type: String, required: true },
-    stateProvince: { type: String, required: true },
-    country: { type: String, required: true },
-    zipCode: { type: String, required: true }
-}, { _id: false });
-
-const familyDetailsSchema = new Schema({
-    name: { type: String, required: true },
-    relationship: { type: String, required: true },
-    dob: { type: String, required: true },
-    gender: { type: String, required: true },
-    phoneNumber: { type: String, required: true },
-    email: {
-        type: String,
-        required: true,
-        trim: true,
-        validate: {
-            validator: (value) => {
-                const re = /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
-                return value.match(re);
-            },
-            message: "Please enter a valid email address"
-        }
+const addressSchema = new Schema(
+    {
+        line1: { type: String, required: true },
+        street: { type: String, required: true },
+        city: { type: String, required: true },
+        stateProvince: { type: String, required: true },
+        country: { type: String, required: true },
+        zipCode: { type: String, required: true },
     },
-    address: { type: String, required: true },
-    maritalStatus: { type: String, required: true },
-    employmentStatus: { type: String, required: true },
-    dependantStatus: { type: String, required: true }
-}, { _id: false });
+    { _id: false },
+);
 
-const bankDetailsSchema = new Schema({
-    bankName: { type: String, required: true },
-    bankAccountNumber: { type: String, required: true },
-    ifsc: { type: String, required: true }
-}, { _id: false });
+const familyDetailsSchema = new Schema(
+    {
+        name: { type: String, required: true },
+        relationship: { type: String, required: true },
+        dob: { type: String, required: true },
+        gender: { type: String, required: true },
+        phoneNumber: { type: String, required: true },
+        email: {
+            type: String,
+            required: true,
+            trim: true,
+            validate: {
+                validator: (value) => {
+                    const re =
+                        /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+                    return value.match(re);
+                },
+                message: "Please enter a valid email address",
+            },
+        },
+        address: { type: String, required: true },
+        maritalStatus: { type: String, required: true },
+        employmentStatus: { type: String, required: true },
+        dependantStatus: { type: String, required: true },
+    },
+    { _id: false },
+);
+
+const bankDetailsSchema = new Schema(
+    {
+        bankName: { type: String, required: true },
+        bankAccountNumber: { type: String, required: true },
+        ifsc: { type: String, required: true },
+    },
+    { _id: false },
+);
 
 const userSchema = new Schema({
     name: {
         type: String,
         required: true,
-        trim: true
+        trim: true,
     },
     email: {
         type: String,
@@ -57,44 +66,37 @@ const userSchema = new Schema({
         trim: true,
         validate: {
             validator: (value) => {
-                const re = /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+                const re =
+                    /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
                 return value.match(re);
             },
-            message: "Please enter a valid email address"
-        }
+            message: "Please enter a valid email address",
+        },
     },
     num: {
         type: String,
         required: true,
         minlength: 10,
-        maxlength: 10
+        maxlength: 10,
     },
     password: {
         type: String,
-        required: true
+        required: true,
     },
-    address: {
+
+    department: {
         type: String,
-        default: ""
-    },
-    dob: {
-        type: String,
-        default: ""
-    },
-    position: {
-        type: String,
-        default: ""
+        default: "",
     },
     feedback: {
         type: String,
-        default: ""
+        default: "",
     },
     presentAddress: addressSchema,
     permanentAddress: addressSchema,
     familyDetails: familyDetailsSchema,
-    bankDetails: bankDetailsSchema
+    bankDetails: bankDetailsSchema,
 });
-
 
 userSchema.methods.comparePassword = async function (userPassword) {
     try {
@@ -105,7 +107,6 @@ userSchema.methods.comparePassword = async function (userPassword) {
     }
 };
 
-
-const userModel = db.model('User',userSchema);
+const userModel = db.model("User", userSchema);
 
 module.exports = userModel;
