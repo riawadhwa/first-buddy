@@ -1,25 +1,28 @@
-const UserService = require('../services/user_services');
-
+const UserService = require("../services/user_services");
 
 function extractValidationErrors(error) {
     const validationErrors = {};
     for (const field in error.errors) {
-        if (error.errors[field].kind === 'user defined') {
+        if (error.errors[field].kind === "user defined") {
             validationErrors[field] = error.errors[field].message;
         }
     }
     return validationErrors;
 }
 
+exports.register = async (req, res, next) => {
+    try {
+        const { name, email, num, password } = req.body;
+        const successRes = await UserService.registerUser(
+            name,
+            email,
+            num,
+            password,
+        );
 
-exports.register = async(req,res,next)=>{
-    try{
-const {name,email,num,password} = req.body;
-const successRes = await UserService.registerUser(name,email,num,password);
-
-res.json({status:true,success:`${email} User Registered Success`})
-    }catch (error) {
-        if (error.name === 'ValidationError') {
+        res.json({ status: true, success: `${email} User Registered Success` });
+    } catch (error) {
+        if (error.name === "ValidationError") {
             // If it's a Mongoose validation error, extract error messages.
             const validationErrors = extractValidationErrors(error);
             res.status(400).json({ errors: validationErrors });
@@ -28,9 +31,7 @@ res.json({status:true,success:`${email} User Registered Success`})
             res.status(500).json({ error: error.message });
         }
     }
-
-}
-
+};
 
 exports.login = async (req, res) => {
     try {
@@ -38,16 +39,24 @@ exports.login = async (req, res) => {
         const user = await UserService.checkUser(email);
 
         if (!user) {
-            return res.status(404).json({ status: false, message: "User does not exist" });
+            return res
+                .status(404)
+                .json({ status: false, message: "User does not exist" });
         }
 
         const isMatch = await user.comparePassword(password);
         if (!isMatch) {
-            return res.status(400).json({ status: false, message: "Invalid password" });
+            return res
+                .status(400)
+                .json({ status: false, message: "Invalid password" });
         }
 
         const tokenData = { _id: user._id, email: user.email };
-        const token = await UserService.generateToken(tokenData, "secretKey", "1h");
+        const token = await UserService.generateToken(
+            tokenData,
+            "secretKey",
+            "1h",
+        );
 
         res.status(200).json({ status: true, token: token });
     } catch (err) {
@@ -55,9 +64,8 @@ exports.login = async (req, res) => {
     }
 };
 
-
 exports.updateDetails = async (req, res) => {
-    try { 
+    try {
         user: req.user;
         // Extract email from request body
         const email = req.body.email;
@@ -70,7 +78,7 @@ exports.updateDetails = async (req, res) => {
                 city: req.body.presentAddressCity,
                 stateProvince: req.body.presentAddressStateProvince,
                 country: req.body.presentAddressCountry,
-                zipCode: req.body.presentAddressZipCode
+                zipCode: req.body.presentAddressZipCode,
             },
             permanentAddress: {
                 line1: req.body.permanentAddressLine1,
@@ -78,14 +86,17 @@ exports.updateDetails = async (req, res) => {
                 city: req.body.permanentAddressCity,
                 stateProvince: req.body.permanentAddressStateProvince,
                 country: req.body.permanentAddressCountry,
-                zipCode: req.body.permanentAddressZipCode
-            }
+                zipCode: req.body.permanentAddressZipCode,
+            },
 
             // Add more fields as needed
         };
 
         // Update the user with additional details
-        const updatedUser = await UserService.updateUser(email, additionalDetails);
+        const updatedUser = await UserService.updateUser(
+            email,
+            additionalDetails,
+        );
 
         // Send the updated user as a response
         res.json(updatedUser);
@@ -95,28 +106,31 @@ exports.updateDetails = async (req, res) => {
     }
 };
 
+exports.getAllUsers = async (req, res) => {
+    try {
+        const users = await UserService.getAllUsers();
+        res.json(users);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
 
-
-
-
-exports.feedback = async(req,res) => {
-    try{
-        const {email,feedback} = req.body;
+exports.feedback = async (req, res) => {
+    try {
+        const { email, feedback } = req.body;
         const user = await UserService.checkUser(email);
-        if(!user){
+        if (!user) {
             throw new Error("User Dont Exist");
         }
         user.feedback = feedback;
         const updatedUser = await user.save();
-        res.json({status:true,success:`feedback saved`})
-
-    }catch(error){
+        res.json({ status: true, success: `feedback saved` });
+    } catch (error) {
         console.error(error); // Log the error for debugging purposes
 
         res.status(500).json({
             status: false,
-            error: 'Internal Server Error',
+            error: "Internal Server Error",
         });
-
     }
-}
+};

@@ -4,13 +4,8 @@ const FileController = require("../controller/file_controller");
 const UserService = require("../services/user_services");
 const authenticate = require('../middleware/authenticate');
 
-route.post("/registration", UserController.register);
-route.post("/login", UserController.login);
 
-route.get("/user", authenticate, (req, res) => {
-  // req.user is available here thanks to our middleware
-  res.json({ id: req.user });
-});
+route.post("/login", UserController.login);
 
 
 
