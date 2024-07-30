@@ -2,7 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const userRouter = require("./routes/user_routes");
-
+const adminRouter = require("./routes/admin_routes");
 const app = express();
 
 // Use CORS middleware
@@ -24,5 +24,6 @@ app.get("/", (req, res) => {
 
 // Use your routes
 app.use("/api", userRouter); // Adjust the base path as needed
+app.use("/admin", adminRouter);
 
 module.exports = app;

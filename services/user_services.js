@@ -58,6 +58,14 @@ class UserService {
             throw error;
         }
     }
+    static async getAllUsers() {
+        try {
+            const users = await userModel.find({}, "email name _id");
+            return users;
+        } catch (error) {
+            throw new Error("Error fetching users: " + error.message);
+        }
+    }
 }
 
 module.exports = UserService;
