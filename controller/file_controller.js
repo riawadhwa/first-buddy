@@ -23,7 +23,7 @@ const multerMiddleware = upload.fields([
 const uploadFiles = async (req, res) => {
   try {
     const newFile = new File({
-      user: req.user, // Assuming you have a user model and user ID is stored in the request
+      user: req.user, // Assuming you have a user model and user ID is stored in the requzxest
       title: req.body.title,
       description: req.body.description,
       generalDocuments: {

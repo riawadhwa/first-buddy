@@ -41,9 +41,9 @@ class UserService {
         return jwt.sign(tokenData, secretKey, { expiresIn: jwt_expire });
     }
 
-    static async updateUser(email, additionalDetails) {
+    static async updateUser(userId, additionalDetails) {
         try {
-            const user = await userModel.findOne({ email });
+            const user = await userModel.findById(userId);
 
             if (!user) {
                 throw new Error("User not found");

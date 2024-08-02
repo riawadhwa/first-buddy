@@ -15,7 +15,7 @@ route.post(
     FileController.uploadFiles,
 );
 
-route.post('/update-details', UserController.updateDetails);
+route.post('/update-details', authenticate , UserController.updateDetails);
 
 route.post("/feedback-form", UserController.feedback);
 

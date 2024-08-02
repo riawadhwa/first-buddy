@@ -4,6 +4,45 @@ const db = require("../config/db");
 
 const { Schema } = mongoose;
 
+const basicInfoSchema = new Schema(
+    {
+        title: { type: String, required: true },
+        fname: { type: String, required: true },
+        lname: { type: String, required: true },
+        email: {
+            type: String,
+            required: true,
+            trim: true,
+            validate: {
+                validator: (value) => {
+                    const re =
+                        /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+                    return value.match(re);
+                },
+                message: "Please enter a valid email address",
+            },
+        },
+        fatherName: { type: String, required: true },
+        motherName: { type: String, required: true },
+        guardianName: { type: String },
+        placeOfBirth: { type: String, required: true },
+        bloodGroup: { type: String, required: true },
+        dob: { type: Date, required: true },
+        gender: { type: String, required: true },
+        maritalStatus: { type: String, required: true },
+        spouseName: { type: String },
+        weddingDate: { type: Date },
+        presentPhoneNumber: { type: String, required: true },
+        aadharNumber: { type: String, required: true },
+        panCardNumber: { type: String, required: true },
+        passportNumber: { type: String },
+        passportExpiryDate: { type: Date },
+        emergencyContact: { type: String, required: true },
+    },
+    { _id: false }
+);
+
+
 const addressSchema = new Schema(
     {
         line1: { type: String, required: true },
@@ -92,6 +131,7 @@ const userSchema = new Schema({
         type: String,
         default: "",
     },
+    basicInfo: basicInfoSchema,
     presentAddress: addressSchema,
     permanentAddress: addressSchema,
     familyDetails: familyDetailsSchema,
