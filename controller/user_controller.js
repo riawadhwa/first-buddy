@@ -67,11 +67,37 @@ exports.login = async (req, res) => {
 
 exports.updateDetails = async (req, res) => {
     try {
-        user: req.user;
+        
+        const userId = req.user;
         // Extract email from request body
-        const email = req.body.email;
+        //const email = req.body.email;
 
+        
         const additionalDetails = {
+
+            basicInfo: {
+                title: req.body.title,
+                fname: req.body.fname,
+                lname: req.body.lname,
+                email: req.body.email,
+                fatherName: req.body.fatherName,
+                motherName: req.body.motherName,
+                guardianName: req.body.guardianName,
+                placeOfBirth: req.body.placeOfBirth,
+                bloodGroup: req.body.bloodGroup,
+                dob: req.body.dob,
+                gender: req.body.gender,
+                maritalStatus: req.body.maritalStatus,
+                spouseName: req.body.spouseName,
+                weddingDate: req.body.weddingDate,
+                presentPhoneNumber: req.body.presentPhoneNumber,
+                aadharNumber: req.body.aadharNumber,
+                panCardNumber: req.body.panCardNumber,
+                passportNumber: req.body.passportNumber,
+                passportExpiryDate: req.body.passportExpiryDate,
+                emergencyContact: req.body.emergencyContact,
+            },
+
             // Add the present address details
             presentAddress: {
                 line1: req.body.presentAddressLine1,
@@ -112,7 +138,7 @@ exports.updateDetails = async (req, res) => {
 
         // Update the user with additional details
         const updatedUser = await UserService.updateUser(
-            email,
+            userId,
             additionalDetails,
         );
 

@@ -14,8 +14,6 @@ function authenticate(req, res, next) {
         // Verify the token and extract the payload
         const payload = jwt.verify(token, process.env.JWT_SECRET);
 
-        console.log("Decoded token payload:", payload); // Debug log
-
         // Ensure payload contains the user ID
         if (!payload || !payload._id) {
             return res
