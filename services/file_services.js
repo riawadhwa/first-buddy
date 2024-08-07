@@ -17,8 +17,9 @@ const listUserDocuments = async (userId) => {
 };
 
 // Function to retrieve a specific document
-const getDocument = async (fileId, docType) => {
-  const fileDoc = await File.findById(fileId);
+const getDocument = async (userId , docType) => {
+  const fileDoc = await File.findOne({ user: userId });
+  
   if (!fileDoc || (!fileDoc.generalDocuments[docType] && !fileDoc.educationalDocuments[docType])) {
     throw new Error("Document not found");
   }
