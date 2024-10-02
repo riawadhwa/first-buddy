@@ -8,14 +8,6 @@ const fileSchema = new Schema({
         ref: "User", // Assuming your user model is named 'User'
         required: true,
     },
-    title: {
-        type: String,
-        required: true,
-    },
-    description: {
-        type: String,
-        required: true,
-    },
     generalDocuments: {
         aadharCard: Buffer,
         panCard: Buffer,
